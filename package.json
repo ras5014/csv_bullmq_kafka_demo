@@ -1,0 +1,20 @@
+{
+  "name": "csv_bullmq_kafka_demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node server.js",
+    "consume": "node kafka/consumer.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bullmq": "^5.56.1",
+    "csv-parser": "^3.2.0",
+    "express": "^5.1.0",
+    "kafkajs": "^2.2.4",
+    "multer": "^2.0.1"
+  }
+}

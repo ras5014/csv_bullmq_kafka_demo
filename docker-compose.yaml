@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  # Redis with RedisInsight UI
+  redis:
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379" # Redis server
+      - "8001:8001" # RedisInsight UI
+
+  kafka:
+    image: bitnami/kafka:latest
+    ports:
+      - "9092:9092" # Kafka broker
+      - "29092:29092" # Kafka broker for internal communication
+    volumes:
+      - "kafka_data:/bitnami"
+      - "kafka_log:/tmp/kafka_mounts/logs"
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - ALLOW_PLAINTEXT_LISTENER=yes
+
+  # Kafka UI for management
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=
+    depends_on:
+      - kafka
+
+volumes:
+  kafka_data:
+  kafka_log:
