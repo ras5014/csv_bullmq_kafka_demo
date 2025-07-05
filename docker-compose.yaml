@@ -11,8 +11,8 @@ services:
   kafka:
     image: bitnami/kafka:latest
     ports:
-      - "9092:9092" # Kafka broker
-      - "29092:29092" # Kafka broker for internal communication
+      - "9092:9092" # Internal: Other containers connect here
+      - "29092:29092" # External: Your host applications connect here
     volumes:
       - "kafka_data:/bitnami"
       - "kafka_log:/tmp/kafka_mounts/logs"
