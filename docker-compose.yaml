@@ -1,6 +1,16 @@
 version: "3.8"
 
 services:
+  # Express.js application
+  express-app:
+    build: .
+    ports:
+      - "3000:3000" # Application port
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - KAFKA_HOST=kafka:9092
+
   # Redis with RedisInsight UI
   redis:
     image: redis/redis-stack:latest
